@@ -22,9 +22,9 @@ jobs:
         id: aseprite-link
         uses: a1393323447/fetch-release@main
         with:
-            group: aseprite
-            repo: aseprite
-            match: Aseprite-.*?-Source.zip
+          group: aseprite
+          repo: aseprite
+          match: Aseprite-.*?-Source.zip
 
   create-release:
     name: Create Release
@@ -51,9 +51,9 @@ jobs:
       contents: write
     runs-on: ${{ matrix.os }}
     strategy:
-        matrix:
-          os: [ macOS-13 ]
-        fail-fast: false
+      matrix:
+        os: [macOS-13]
+      fail-fast: false
     steps:
       - name: Install Dependencies
         if: runner.os == 'Linux'
@@ -110,10 +110,13 @@ jobs:
       - name: Create release
         working-directory: aseprite/build/bin
         run: 7z -tzip a Aseprite-${{ needs.create-release.outputs.release-tag }}-${{ runner.os }}.zip *
-      - name: Upload release
-        uses: svenstaro/upload-release-action@v2
+      - name: Upload build
+        uses: ryand56/r2-upload-action@latest
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: aseprite/build/bin/Aseprite-${{ needs.create-release.outputs.release-tag }}-${{ runner.os }}.zip
-          asset_name: Aseprite-${{ needs.create-release.outputs.release-tag }}-${{ runner.os }}.zip
-          tag: ${{ needs.create-release.outputs.release-tag }}
+          r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
+          r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          r2-secret-access-key: ${{ secrets.R2_secret_ACCESS_KEY }}
+          r2-bucket: ${{ secrets.R2_BUCKET }}
+          source-dir: aseprite/build/bin/Aseprite-${{ needs.create-release.outputs.release-tag }}-${{ runner.os }}.zip
+          destination-dir: builds/aseprite/{{ needs.create-release.outputs.release-tag }}/Aseprite-${{ needs.create-release.outputs.release-tag }}-${{ runner.os }}.zip
+          output-file-url: false
