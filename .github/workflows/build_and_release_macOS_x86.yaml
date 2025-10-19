@@ -118,5 +118,5 @@ jobs:
           r2-secret-access-key: ${{ secrets.R2_secret_ACCESS_KEY }}
           r2-bucket: ${{ secrets.R2_BUCKET }}
           source-dir: aseprite/build/bin/Aseprite-${{ needs.create-release.outputs.release-tag }}-${{ runner.os }}.zip
-          destination-dir: builds/aseprite/{{ needs.create-release.outputs.release-tag }}/Aseprite-${{ needs.create-release.outputs.release-tag }}-${{ runner.os }}.zip
+          destination-dir: builds/aseprite/${{ needs.create-release.outputs.release-tag }}
           output-file-url: false
