@@ -1,0 +1,51 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "aseprite-builder",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-10-19",
+  // "compatibility_flags": [
+  //   "nodejs_compat"
+  // ],
+  "workers_dev": true,
+  "vars": {
+    "R2_BUCKET": "personal",
+    "R2_BUCKET_REGION": "apac",
+    "path": "builds/aseprite"
+  },
+  "kv_namespaces": [
+    {
+      "binding": "KV",
+      "id": "e9d9fca848664f69b7fdd2a1044d6f8f",
+      "preview_id": "af35fb9192a04553be26b7cea99bcbef",
+      "remote": true
+    },
+    {
+      "binding": "CACHE_KV",
+      "id": "dfb85d80610b4e92b3385af4628415cc",
+      "preview_id": "81ed043df60a45a2b01158f77d2dcc21",
+      "remote": true
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "R2",
+      "bucket_name": "personal",
+      "preview_bucket_name": "personal-preview",
+      "remote": true
+    }
+  ],
+  // "d1_databases": [
+  //   {
+  //     "binding": "MY_DB",
+  //     "database_name": "my-database",
+  //     "database_id": ""
+  //   }
+  // ],
+  // "ai": {
+  //   "binding": "AI"
+  // },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  }
+}
