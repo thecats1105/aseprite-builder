@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import { Bindings } from '..'
+import semver from 'semver'
 
 const versions = new Hono<{ Bindings: Bindings }>()
 
@@ -36,10 +37,19 @@ versions.get('/', async c => {
       }
     }
 
-    data = Object.entries(versionMap).map(([version, osSet]) => ({
+    const versions = Object.entries(versionMap).map(([version, osSet]) => ({
       version: version.replace(/^v/, ''),
       os: Array.from(osSet)
     }))
+
+    data = {
+      latest:
+        semver.maxSatisfying(
+          versions.map(v => v.version),
+          '*'
+        ) || versions[0].version,
+      versions
+    }
 
     await c.env.CACHE_KV.put(cacheKey, JSON.stringify(data), {
       expirationTtl: EXPIRATION_TTL
