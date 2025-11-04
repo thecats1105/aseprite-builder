@@ -37,7 +37,7 @@ versions.get('/', async c => {
     }
 
     data = Object.entries(versionMap).map(([version, osSet]) => ({
-      version,
+      version: version.replace(/^v/, ''),
       os: Array.from(osSet)
     }))
 
