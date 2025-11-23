@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
+import type { AllowedIPsSchema } from './allowed-ips'
 import { Bindings } from '..'
 
 const download = new Hono<{ Bindings: Bindings }>()
@@ -11,7 +12,10 @@ download.notFound(c => {
 
 download.get('/:version/:os', async c => {
   const clientIP = c.req.header('CF-Connecting-IP')
-  const allowedIPs = JSON.parse((await c.env.KV.get('allowed-ips')) || '[]')
+  const allowedIPs = (await c.env.KV.get(
+    'allowed-ips',
+    'json'
+  )) as AllowedIPsSchema | null
 
   console.log({
     clientIP,
@@ -20,7 +24,7 @@ download.get('/:version/:os', async c => {
 
   if (
     clientIP &&
-    !(allowedIPs.includes(clientIP) || clientIP === '127.0.0.1')
+    !(allowedIPs?.ips.includes(clientIP) || clientIP === '127.0.0.1')
   ) {
     return c.json({ success: false, message: 'Access Denied' }, 403)
   }
