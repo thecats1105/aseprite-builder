@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import allowedIPs from './routes/allowed-ips'
+import auth from './routes/auth'
 import download from './routes/download'
 import root from './routes/root'
 import versions from './routes/versions'
@@ -29,6 +29,6 @@ app.route('/versions', versions)
 app.route('/', download)
 
 // Manage allowed IPs
-app.route('/allowed-ips', allowedIPs)
+app.route('/auth', auth)
 
 export default app
