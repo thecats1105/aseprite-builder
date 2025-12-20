@@ -3,7 +3,7 @@ import { zValidator } from '@hono/zod-validator'
 import * as z from 'zod'
 import { Bindings } from '..'
 
-const allowedIPs = new Hono<{ Bindings: Bindings }>()
+const auth = new Hono<{ Bindings: Bindings }>()
 
 const AllowedIPsSchema = z.object({
   ips: z.array(z.ipv4())
@@ -15,7 +15,7 @@ const AllowedIPBody = z.object({
   ips: z.array(z.ipv4())
 })
 
-allowedIPs.post('/add', zValidator('json', AllowedIPBody), async c => {
+auth.post('/add', zValidator('json', AllowedIPBody), async c => {
   const body = c.req.valid('json')
   const accessKey = c.req.header('X-Access-Key')
 
@@ -39,7 +39,7 @@ allowedIPs.post('/add', zValidator('json', AllowedIPBody), async c => {
   return c.json({ success: true, ips: body.ips }, 200)
 })
 
-allowedIPs.post('/remove', zValidator('json', AllowedIPBody), async c => {
+auth.post('/remove', zValidator('json', AllowedIPBody), async c => {
   const body = c.req.valid('json')
   const accessKey = c.req.header('X-Access-Key')
 
@@ -63,4 +63,4 @@ allowedIPs.post('/remove', zValidator('json', AllowedIPBody), async c => {
   return c.json({ success: true, ips: body.ips }, 200)
 })
 
-export default allowedIPs
+export default auth
