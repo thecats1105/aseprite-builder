@@ -5,17 +5,18 @@
     "": {
       "name": "aseprite-builder",
       "dependencies": {
-        "@aws-sdk/client-s3": "^3.956.0",
-        "@aws-sdk/s3-request-presigner": "^3.956.0",
+        "@aws-sdk/client-s3": "^3.972.0",
+        "@aws-sdk/s3-request-presigner": "^3.972.0",
         "@hono/zod-validator": "^0.7.6",
         "@types/semver": "^7.7.1",
-        "hono": "^4.11.1",
+        "hono": "^4.11.4",
         "octokit": "^5.0.5",
         "semver": "^7.7.3",
-        "zod": "^4.2.1",
+        "zod": "^4.3.5",
       },
       "devDependencies": {
-        "wrangler": "^4.56.0",
+        "typescript": "^5.9.3",
+        "wrangler": "^4.59.3",
       },
     },
   },
@@ -445,6 +446,8 @@
     "toad-cache": ["toad-cache@3.7.0", "", {}, "sha512-/m8M+2BJUpoJdgAHoG+baCwBT+tf2VraSfkBgl0Y00qIWt41DJ8R5B8nsEw0I58YwF5IZH6z24/2TobDKnqSWw=="],
 
     "tslib": ["tslib@2.8.1", "", {}, "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w=="],
+
+    "typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
 
     "undici": ["undici@7.18.2", "", {}, "sha512-y+8YjDFzWdQlSE9N5nzKMT3g4a5UBX1HKowfdXh0uvAnTaqqwqB92Jt4UXBAeKekDs5IaDKyJFR4X1gYVCgXcw=="],
 

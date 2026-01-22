@@ -2,13 +2,25 @@ import { Hono } from 'hono'
 import { Bindings } from '..'
 import semver from 'semver'
 
+export interface VersionInfo {
+  version: string
+  os: string[]
+}
+
+export interface VersionsResponse {
+  latest: string
+  versions: VersionInfo[]
+}
+
 const versions = new Hono<{ Bindings: Bindings }>()
 
 versions.get('/', async c => {
   const EXPIRATION_TTL = 600 // 10 minutes
   const cacheKey = 'versions-list'
 
-  let data = await c.env.CACHE_KV.get(cacheKey, { type: 'json' })
+  let data = (await c.env.CACHE_KV.get(cacheKey, {
+    type: 'json'
+  })) as VersionsResponse | null
   let fromCache = true
 
   if (!data) {
@@ -37,18 +49,20 @@ versions.get('/', async c => {
       }
     }
 
-    const versions = Object.entries(versionMap).map(([version, osSet]) => ({
-      version: version.replace(/^v/, ''),
-      os: Array.from(osSet)
-    }))
+    const versionsList: VersionInfo[] = Object.entries(versionMap).map(
+      ([version, osSet]) => ({
+        version: version.replace(/^v/, ''),
+        os: Array.from(osSet)
+      })
+    )
 
     data = {
       latest:
         semver.maxSatisfying(
-          versions.map(v => v.version),
+          versionsList.map(v => v.version),
           '*'
-        ) || versions[0].version,
-      versions
+        ) || versionsList[0].version,
+      versions: versionsList
     }
 
     await c.env.CACHE_KV.put(cacheKey, JSON.stringify(data), {
@@ -56,7 +70,7 @@ versions.get('/', async c => {
     })
   }
 
-  return c.json(data, 200)
+  return c.json<VersionsResponse>(data, 200)
 })
 
 export default versions

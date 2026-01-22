@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import auth from './routes/auth'
+import build from './routes/build'
 import download from './routes/download'
 import root from './routes/root'
 import versions from './routes/versions'
@@ -7,8 +8,10 @@ import versions from './routes/versions'
 export type Bindings = {
   ACCESS_KEY: string
   CACHE_KV: KVNamespace
-  R2: R2Bucket
+  GITHUB_REPOSITORY: string
+  GITHUB_TOKEN: string
   KV: KVNamespace
+  R2: R2Bucket
   R2_ACCESS_KEY_ID: string
   R2_SECRET_ACCESS_KEY: string
   R2_ACCOUNT_ID: string
@@ -17,7 +20,8 @@ export type Bindings = {
   path: string
 }
 
-const app = new Hono<{ Bindings: Bindings }>()
+export const app = new Hono<{ Bindings: Bindings }>()
+export type AppType = typeof app
 
 // Root route
 app.route('/', root)
@@ -30,5 +34,8 @@ app.route('/', download)
 
 // Manage allowed IPs
 app.route('/auth', auth)
+
+// Trigger build
+app.route('/build', build)
 
 export default app
