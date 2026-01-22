@@ -8,7 +8,7 @@ versions.get('/', async c => {
   const EXPIRATION_TTL = 600 // 10 minutes
   const cacheKey = 'versions-list'
 
-  let data = await c.env.KV.get(cacheKey, { type: 'json' })
+  let data = await c.env.CACHE_KV.get(cacheKey, { type: 'json' })
   let fromCache = true
 
   if (!data) {
