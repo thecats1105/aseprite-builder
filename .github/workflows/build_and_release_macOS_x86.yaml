@@ -1,12 +1,12 @@
 name: Build and release Aseprite (macOS x86)
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'BuildLog.md'
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Aseprite tag to build (e.g. v1.0.0). Leave empty for latest.'
+        required: false
+        default: ''
 env:
   BUILD_TYPE: Release
 
@@ -24,6 +24,7 @@ jobs:
         with:
           group: aseprite
           repo: aseprite
+          tag: ${{ github.event.inputs.tag }}
           match: Aseprite-.*?-Source.zip
 
   create-release:

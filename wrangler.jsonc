@@ -8,6 +8,7 @@
   // ],
   "workers_dev": true,
   "vars": {
+    "GITHUB_REPOSITORY": "thecats1105/aseprite-builder:main",
     "R2_BUCKET": "personal",
     "R2_BUCKET_REGION": "apac",
     "path": "builds/aseprite"

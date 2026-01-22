@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
-import type { AllowedIPsSchema } from './allowed-ips'
+import type { AllowedIPsSchema } from './auth'
 import { Bindings } from '..'
 
 const download = new Hono<{ Bindings: Bindings }>()
