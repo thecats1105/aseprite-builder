@@ -12,6 +12,7 @@
     "@hono/zod-validator": "^0.7.6",
     "@types/semver": "^7.7.1",
     "hono": "^4.11.4",
+    "kuron": "^0.0.3",
     "octokit": "^5.0.5",
     "semver": "^7.7.3",
     "zod": "^4.3.5"

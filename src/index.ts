@@ -4,6 +4,7 @@ import build from './routes/build'
 import download from './routes/download'
 import root from './routes/root'
 import versions from './routes/versions'
+import cron from './cron'
 
 export type Bindings = {
   ACCESS_KEY: string
@@ -21,21 +22,22 @@ export type Bindings = {
 }
 
 export const app = new Hono<{ Bindings: Bindings }>()
-export type AppType = typeof app
+  // Root route
+  .route('/', root)
 
-// Root route
-app.route('/', root)
+  // Get Available versions
+  .route('/versions', versions)
 
-// Get Available versions
-app.route('/versions', versions)
+  // Get Aseprite by version and OS
+  .route('/', download)
 
-// Get Aseprite by version and OS
-app.route('/', download)
+  // Manage allowed IPs
+  .route('/auth', auth)
 
-// Manage allowed IPs
-app.route('/auth', auth)
+  // Trigger build
+  .route('/build', build)
 
-// Trigger build
-app.route('/build', build)
-
-export default app
+export default {
+  fetch: app.fetch,
+  scheduled: cron.scheduled
+}

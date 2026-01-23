@@ -10,6 +10,7 @@
         "@hono/zod-validator": "^0.7.6",
         "@types/semver": "^7.7.1",
         "hono": "^4.11.4",
+        "kuron": "^0.0.3",
         "octokit": "^5.0.5",
         "semver": "^7.7.3",
         "zod": "^4.3.5",
@@ -426,6 +427,8 @@
     "hono": ["hono@4.11.4", "", {}, "sha512-U7tt8JsyrxSRKspfhtLET79pU8K+tInj5QZXs1jSugO1Vq5dFj3kmZsRldo29mTBfcjDRVRXrEZ6LS63Cog9ZA=="],
 
     "kleur": ["kleur@4.1.5", "", {}, "sha512-o+NO+8WrRiQEE4/7nwRJhN1HWpVmJm511pBHUxPLtp0BUISzlBplORYSmTclCnJvQq2tKu/sgl3xVpkc7ZWuQQ=="],
+
+    "kuron": ["kuron@0.0.3", "", {}, "sha512-qNH3PWlxOm4mHgzZUaI7YpDbIcDVzozcoZkNUlzjVGLwndTS21eBdhMzD6soXiTGbpRsQ1r5Gxs4n6CVBHiQ3A=="],
 
     "miniflare": ["miniflare@4.20260116.0", "", { "dependencies": { "@cspotcode/source-map-support": "0.8.1", "sharp": "^0.34.5", "undici": "7.18.2", "workerd": "1.20260116.0", "ws": "8.18.0", "youch": "4.1.0-beta.10", "zod": "^3.25.76" }, "bin": { "miniflare": "bootstrap.js" } }, "sha512-fCU1thOdiKfcauYp/gAchhesOTqTPy3K7xY6g72RiJ2xkna18QJ3Mh5sgDmnqlOEqSW9vpmYeK8vd/aqkrtlUA=="],
 

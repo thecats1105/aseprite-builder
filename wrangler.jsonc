@@ -13,17 +13,20 @@
     "R2_BUCKET_REGION": "apac",
     "path": "builds/aseprite"
   },
+  "triggers": {
+    "crons": ["0 15 * * *"]
+  },
   "kv_namespaces": [
     {
       "binding": "KV",
       "id": "e9d9fca848664f69b7fdd2a1044d6f8f",
-      "preview_id": "af35fb9192a04553be26b7cea99bcbef",
+      "preview_id": "e9d9fca848664f69b7fdd2a1044d6f8f",
       "remote": true
     },
     {
       "binding": "CACHE_KV",
       "id": "dfb85d80610b4e92b3385af4628415cc",
-      "preview_id": "81ed043df60a45a2b01158f77d2dcc21",
+      "preview_id": "dfb85d80610b4e92b3385af4628415cc",
       "remote": true
     }
   ],
@@ -31,7 +34,7 @@
     {
       "binding": "R2",
       "bucket_name": "personal",
-      "preview_bucket_name": "personal-preview",
+      "preview_bucket_name": "personal",
       "remote": true
     }
   ],
