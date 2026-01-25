@@ -44,8 +44,15 @@ function main() {
   }
 
   manifest.version = newVersion
-  manifest.architecture['64bit'].hash = windowsHash
-  manifest.architecture['32bit'].hash = windowsHash
+
+  const architectures = Object.keys(manifest.autoupdate.architecture)
+  for (const arch of architectures) {
+    if (manifest.architecture[arch]) {
+      const urlTemplate = manifest.autoupdate.architecture[arch].url
+      manifest.architecture[arch].url = urlTemplate.replace('$version', newVersion)
+      manifest.architecture[arch].hash = windowsHash
+    }
+  }
 
   writeManifest(manifest)
   setGitHubOutput(newVersion)
