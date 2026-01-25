@@ -2,7 +2,7 @@ import { Cron, CronContext } from 'kuron'
 import { app, Bindings } from '.'
 import { Octokit } from 'octokit'
 import { VersionsResponse } from './routes/versions'
-import semver from 'semver'
+import { isNewer, compareVersions } from './utils/version'
 
 export default new Cron().schedule('0 15 * * *', async c => checkUpdates(c))
 
@@ -31,17 +31,32 @@ async function checkUpdates(c: CronContext) {
   })
 
   try {
-    const { data: asepriteData } = await octokit.rest.repos.getLatestRelease({
+    const { data: tags } = await octokit.rest.repos.listTags({
       owner: 'aseprite',
-      repo: 'aseprite'
+      repo: 'aseprite',
+      per_page: 30
     })
 
-    const upstreamLatestTag = asepriteData.tag_name
+    const stableTags = tags
+      .map(t => t.name)
+      .filter(
+        name =>
+          !name.toLowerCase().includes('beta') &&
+          !name.toLowerCase().includes('rc')
+      )
+      .sort((a, b) => compareVersions(b, a))
+
+    if (stableTags.length === 0) {
+      console.error('No stable tags found')
+      return
+    }
+
+    const upstreamLatestTag = stableTags[0]
     const upstreamLatest = upstreamLatestTag.replace(/^v/, '')
 
     console.log(`Upstream latest version: ${upstreamLatest}`)
 
-    if (semver.gt(upstreamLatest, currentLatest)) {
+    if (isNewer(upstreamLatest, currentLatest)) {
       console.log(
         `New version found! Upstream: ${upstreamLatest} > Current: ${currentLatest}`
       )

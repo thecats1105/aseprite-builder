@@ -1,6 +1,6 @@
 import { Hono } from 'hono'
 import { Bindings } from '..'
-import semver from 'semver'
+import { sortVersions } from '../utils/version'
 
 export interface VersionInfo {
   version: string
@@ -56,12 +56,10 @@ versions.get('/', async c => {
       })
     )
 
+    const sortedVersions = sortVersions(versionsList.map(v => v.version))
+
     data = {
-      latest:
-        semver.maxSatisfying(
-          versionsList.map(v => v.version),
-          '*'
-        ) || versionsList[0].version,
+      latest: sortedVersions.length > 0 ? sortedVersions[0] : '0.0.0',
       versions: versionsList
     }
 
