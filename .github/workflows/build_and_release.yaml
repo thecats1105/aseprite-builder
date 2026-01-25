@@ -10,23 +10,8 @@ env:
   BUILD_TYPE: Release
 
 jobs:
-  create-release:
-    name: Create Release
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ github.event.inputs.tag }}
-          body: Aseprite-${{ github.event.inputs.tag }}
-          skipIfReleaseExists: true
-          token: ${{ secrets.GITHUB_TOKEN }}
-
   build-aseprite:
     name: Build Aseprite
-    needs: create-release
     permissions:
       contents: write
     runs-on: ${{ matrix.os }}
@@ -132,7 +117,7 @@ jobs:
 
   update-scoop-manifest:
     name: Update Scoop Manifest
-    needs: [create-release, build-aseprite]
+    needs: [build-aseprite]
     runs-on: ubuntu-latest
     permissions:
       contents: write
