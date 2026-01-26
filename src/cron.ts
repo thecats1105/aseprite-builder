@@ -39,11 +39,7 @@ async function checkUpdates(c: CronContext) {
 
     const stableTags = tags
       .map(t => t.name)
-      .filter(
-        name =>
-          !name.toLowerCase().includes('beta') &&
-          !name.toLowerCase().includes('rc')
-      )
+      .filter(name => !name.includes('-') && !name.includes('beta'))
       .sort((a, b) => compareVersions(b, a))
 
     if (stableTags.length === 0) {
