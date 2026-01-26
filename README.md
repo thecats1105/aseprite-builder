@@ -32,7 +32,7 @@ Edit the `wrangler.jsonc` file in the project root to match your Cloudflare envi
 Deploy the project using the `wrangler` CLI:
 
 ```bash
-npx wrangler deploy
+bunx wrangler deploy
 ```
 
 ### 5. Create Secrets
@@ -41,16 +41,16 @@ Refer to the `.env.example` file and create the necessary secrets using `wrangle
 
 ```bash
 # Master key for API calls and download authentication
-npx wrangler secret put ACCESS_KEY
+bunx wrangler secret put ACCESS_KEY
 
 # GitHub Personal Access Token for triggering actions (requires repo scope)
-npx wrangler secret put GITHUB_TOKEN
+bunx wrangler secret put GITHUB_TOKEN
 
 # Credentials for R2 storage access
-npx wrangler secret put R2_ACCESS_KEY_ID
-npx wrangler secret put R2_ACCOUNT_ID
-npx wrangler secret put R2_BUCKET
-npx wrangler secret put R2_SECRET_ACCESS_KEY
+bunx wrangler secret put R2_ACCESS_KEY_ID
+bunx wrangler secret put R2_ACCOUNT_ID
+bunx wrangler secret put R2_BUCKET
+bunx wrangler secret put R2_SECRET_ACCESS_KEY
 ```
 
 ---
@@ -99,5 +99,5 @@ Runs automatically every day (default 15:00 UTC) to detect new stable releases f
 
 ```bash
 # Test cron trigger locally
-npx wrangler dev --remote --test-scheduled
+bunx wrangler dev --remote --test-scheduled
 ```

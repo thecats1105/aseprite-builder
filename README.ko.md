@@ -32,7 +32,7 @@ GitHub Actions를 사용하여 Aseprite를 자동으로 빌드하고, Cloudflare
 `wrangler` CLI를 사용하여 프로젝트를 배포합니다.
 
 ```bash
-npx wrangler deploy
+bunx wrangler deploy
 ```
 
 ### 5. Secrets 설정
@@ -40,12 +40,12 @@ npx wrangler deploy
 `.env.example` 파일을 참조하여 필요한 비밀 키들을 Workers에 설정합니다.
 
 ```bash
-npx wrangler secret put ACCESS_KEY              # API 호출 시 사용할 인증 키
-npx wrangler secret put GITHUB_TOKEN            # GitHub Actions 트리거용 PAT (repo 권한 필요)
-npx wrangler secret put R2_ACCESS_KEY_ID        # R2 액세스 키 ID
-npx wrangler secret put R2_ACCOUNT_ID           # Cloudflare 계정 ID
-npx wrangler secret put R2_BUCKET               # R2 버킷 이름
-npx wrangler secret put R2_SECRET_ACCESS_KEY    # R2 시크릿 액세스 키
+bunx wrangler secret put ACCESS_KEY              # API 호출 시 사용할 인증 키
+bunx wrangler secret put GITHUB_TOKEN            # GitHub Actions 트리거용 PAT (repo 권한 필요)
+bunx wrangler secret put R2_ACCESS_KEY_ID        # R2 액세스 키 ID
+bunx wrangler secret put R2_ACCOUNT_ID           # Cloudflare 계정 ID
+bunx wrangler secret put R2_BUCKET               # R2 버킷 이름
+bunx wrangler secret put R2_SECRET_ACCESS_KEY    # R2 시크릿 액세스 키
 ```
 
 ---
