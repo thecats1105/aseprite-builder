@@ -104,6 +104,9 @@ All administrative endpoints must include the `X-Access-Key: <ACCESS_KEY>` heade
 Runs automatically every day (default 15:00 UTC) to detect new stable releases from the official Aseprite repository. If a new version is found, it automatically starts the build process.
 
 ```bash
-# Test cron trigger locally
-bunx wrangler dev --remote --test-scheduled
+# Run locally for testing
+bunx wrangler dev --test-scheduled
+
+# Trigger the scheduled event manually
+curl -X GET "http://localhost:8787/__scheduled?cron=0+15+*+*+*"
 ```
