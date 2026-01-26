@@ -71,4 +71,57 @@ versions.get('/', async c => {
   return c.json<VersionsResponse>(data, 200)
 })
 
+versions.delete('/', async c => {
+  const accessKey = c.req.header('X-Access-Key')
+  const version = c.req.query('version')
+
+  if (accessKey !== c.env.ACCESS_KEY) {
+    return c.json({ success: false, message: 'Unauthorized' }, 401)
+  }
+
+  if (!version) {
+    return c.json(
+      { success: false, message: 'Version query parameter is required' },
+      400
+    )
+  }
+
+  const path = c.env.path.endsWith('/') ? c.env.path.slice(0, -1) : c.env.path
+  const prefixes = [
+    `${path}/${version}`,
+    !version.startsWith('v') ? `${path}/v${version}` : null
+  ].filter(Boolean) as string[]
+
+  let deletedCount = 0
+
+  for (const prefix of prefixes) {
+    let truncated = true
+    let cursor: string | undefined
+
+    while (truncated) {
+      const list = await c.env.R2.list({
+        prefix,
+        cursor
+      })
+
+      if (list.objects.length > 0) {
+        const keys = list.objects.map(o => o.key)
+        await c.env.R2.delete(keys)
+        deletedCount += keys.length
+      }
+
+      truncated = list.truncated
+      if (list.truncated) {
+        cursor = list.cursor
+      }
+    }
+  }
+
+  if (deletedCount > 0) {
+    await c.env.CACHE_KV.delete('versions-list')
+  }
+
+  return c.json({ success: true, deleted: deletedCount }, 200)
+})
+
 export default versions

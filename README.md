@@ -91,6 +91,12 @@ All administrative endpoints must include the `X-Access-Key: <ACCESS_KEY>` heade
 - **Description**: Manually triggers an Aseprite build for a specific version via GitHub Actions.
 - **Query**: Use `?force=true` to rebuild even if a build already exists.
 
+#### `DELETE /versions?version=<v>`
+
+- **Description**: Deletes a specific version of Aseprite builds from the R2 bucket.
+- **Header**: `X-Access-Key: <ACCESS_KEY>`
+- **Query**: `version` (e.g., `1.2.3` or `v1.2.3`)
+
 ---
 
 ## ⏰ Auto-Update (Cron Trigger)

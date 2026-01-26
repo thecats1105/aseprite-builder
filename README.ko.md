@@ -94,6 +94,12 @@ bunx wrangler secret put R2_SECRET_ACCESS_KEY    # R2 시크릿 액세스 키
 - **헤더**: `X-Access-Key: <YOUR_ACCESS_KEY>`
 - **쿼리 파라미터**: `?force=true` (기존 빌드가 있어도 무시하고 진행)
 
+#### `DELETE /versions?version=<v>`
+
+- **설명**: R2 버킷에서 특정 버전의 Aseprite 빌드를 삭제합니다.
+- **헤더**: `X-Access-Key: <ACCESS_KEY>`
+- **쿼리**: `version` (예: `1.2.3` 또는 `v1.2.3`)
+
 ---
 
 ## ⏰ 자동 업데이트 (Cron)
