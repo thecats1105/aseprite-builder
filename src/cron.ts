@@ -6,31 +6,49 @@ import { isNewer, compareVersions } from './utils/version'
 
 export default new Cron().schedule('0 15 * * *', async c => checkUpdates(c))
 
+interface CheckUpdatesResult {
+  success: boolean
+  currentVersion: string
+  upstreamVersion: string | null
+  newVersionFound: boolean
+  buildTriggered: boolean
+  error: string | null
+}
+
 async function checkUpdates(c: CronContext) {
   const env = c.env as Bindings
-  const currentVersionsRes = await app.request(
-    '/versions',
-    { method: 'GET' },
-    env,
-    c.executionCtx
-  )
-
-  if (!currentVersionsRes.ok) {
-    console.error('Failed to fetch current versions')
-    return
+  const result: CheckUpdatesResult = {
+    success: false,
+    currentVersion: '',
+    upstreamVersion: null,
+    newVersionFound: false,
+    buildTriggered: false,
+    error: null
   }
 
-  const currentVersionsData =
-    (await currentVersionsRes.json()) as VersionsResponse
-  const currentLatest = currentVersionsData.latest
-
-  console.log(`Current latest built version: ${currentLatest}`)
-
-  const octokit = new Octokit({
-    auth: env.GITHUB_TOKEN
-  })
-
   try {
+    const currentVersionsRes = await app.request(
+      '/versions',
+      { method: 'GET' },
+      env,
+      c.executionCtx
+    )
+
+    if (!currentVersionsRes.ok) {
+      result.error = 'Failed to fetch current versions'
+      console.log(JSON.stringify(result))
+      return
+    }
+
+    const currentVersionsData =
+      (await currentVersionsRes.json()) as VersionsResponse
+    const currentLatest = currentVersionsData.latest
+    result.currentVersion = currentLatest
+
+    const octokit = new Octokit({
+      auth: env.GITHUB_TOKEN
+    })
+
     const { data: tags } = await octokit.rest.repos.listTags({
       owner: 'aseprite',
       repo: 'aseprite',
@@ -43,20 +61,17 @@ async function checkUpdates(c: CronContext) {
       .sort((a, b) => compareVersions(b, a))
 
     if (stableTags.length === 0) {
-      console.error('No stable tags found')
+      result.error = 'No stable tags found'
+      console.log(JSON.stringify(result))
       return
     }
 
     const upstreamLatestTag = stableTags[0]
     const upstreamLatest = upstreamLatestTag.replace(/^v/, '')
-
-    console.log(`Upstream latest version: ${upstreamLatest}`)
+    result.upstreamVersion = upstreamLatest
 
     if (isNewer(upstreamLatest, currentLatest)) {
-      console.log(
-        `New version found! Upstream: ${upstreamLatest} > Current: ${currentLatest}`
-      )
-      console.log(`Triggering build for version ${upstreamLatest}...`)
+      result.newVersionFound = true
 
       const buildRes = await app.request(
         `/build/${upstreamLatest}`,
@@ -71,16 +86,17 @@ async function checkUpdates(c: CronContext) {
       )
 
       if (buildRes.ok) {
-        console.log(`Successfully triggered build for ${upstreamLatest}`)
+        result.buildTriggered = true
+        result.success = true
       } else {
-        console.error(
-          `Failed to trigger build for ${upstreamLatest}: ${await buildRes.text()}`
-        )
+        result.error = `Failed to trigger build: ${await buildRes.text()}`
       }
     } else {
-      console.log('No new version found.')
+      result.success = true
     }
   } catch (error) {
-    console.error('Failed to fetch Aseprite latest release from GitHub', error)
+    result.error = `Failed to fetch Aseprite latest release from GitHub: ${error instanceof Error ? error.message : String(error)}`
   }
+
+  console.log(JSON.stringify(result))
 }
