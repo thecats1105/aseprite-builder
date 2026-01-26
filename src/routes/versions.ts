@@ -59,7 +59,7 @@ versions.get('/', async c => {
     const sortedVersions = sortVersions(versionsList.map(v => v.version))
 
     data = {
-      latest: sortedVersions.length > 0 ? sortedVersions[0] : '0.0.0',
+      latest: sortedVersions.at(-1) ?? '0.0.0',
       versions: versionsList
     }
 

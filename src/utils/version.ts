@@ -58,5 +58,5 @@ export function isNewer(upstream: string, current: string): boolean {
 }
 
 export function sortVersions(versions: string[]): string[] {
-  return [...versions].sort((a, b) => compareVersions(b, a))
+  return [...versions].sort((a, b) => compareVersions(a, b))
 }
