@@ -87,33 +87,27 @@ versions.delete('/', async c => {
   }
 
   const path = c.env.path.endsWith('/') ? c.env.path.slice(0, -1) : c.env.path
-  const prefixes = [
-    `${path}/${version}/`,
-    !version.startsWith('v') ? `${path}/v${version}/` : null
-  ].filter(Boolean) as string[]
+  const prefix = `${path}/v${version.replace(/^v/, '')}/`
 
   let deletedCount = 0
+  let truncated = true
+  let cursor: string | undefined
 
-  for (const prefix of prefixes) {
-    let truncated = true
-    let cursor: string | undefined
+  while (truncated) {
+    const list = await c.env.R2.list({
+      prefix,
+      cursor
+    })
 
-    while (truncated) {
-      const list = await c.env.R2.list({
-        prefix,
-        cursor
-      })
+    if (list.objects.length > 0) {
+      const keys = list.objects.map(o => o.key)
+      await c.env.R2.delete(keys)
+      deletedCount += keys.length
+    }
 
-      if (list.objects.length > 0) {
-        const keys = list.objects.map(o => o.key)
-        await c.env.R2.delete(keys)
-        deletedCount += keys.length
-      }
-
-      truncated = list.truncated
-      if (list.truncated) {
-        cursor = list.cursor
-      }
+    truncated = list.truncated
+    if (list.truncated) {
+      cursor = list.cursor
     }
   }
 

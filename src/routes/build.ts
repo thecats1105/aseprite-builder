@@ -47,7 +47,7 @@ build.post('/:version', async c => {
         workflow_id: w,
         ref: repoBranch,
         inputs: {
-          tag: `v${version}`
+          tag: `v${version.replace(/^v/, '')}`
         }
       })
 

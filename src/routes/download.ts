@@ -29,7 +29,7 @@ download.get('/:version/:os', async c => {
     return c.json({ success: false, message: 'Access Denied' }, 403)
   }
 
-  const { version, os } = c.req.param()
+  const { version: tag, os } = c.req.param()
   let { path } = c.env
 
   if (path.endsWith('/')) path = path.slice(0, -1)
@@ -43,7 +43,8 @@ download.get('/:version/:os', async c => {
     }
   })
 
-  const key = `${path}/${version}/Aseprite-${version}-${os}.zip`
+  const version = tag.replace(/^v/, '')
+  const key = `${path}/v${version}/Aseprite-v${version}-${os}.zip`
   const object = await c.env.R2.head(key)
 
   if (!object) {
