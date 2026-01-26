@@ -88,8 +88,8 @@ versions.delete('/', async c => {
 
   const path = c.env.path.endsWith('/') ? c.env.path.slice(0, -1) : c.env.path
   const prefixes = [
-    `${path}/${version}`,
-    !version.startsWith('v') ? `${path}/v${version}` : null
+    `${path}/${version}/`,
+    !version.startsWith('v') ? `${path}/v${version}/` : null
   ].filter(Boolean) as string[]
 
   let deletedCount = 0
